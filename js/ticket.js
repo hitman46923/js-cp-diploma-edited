@@ -19,13 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let date = new Date(Number(selectSeanse.seanceTimeStamp * 1000));
   let dateStr = date.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric" });
-  let textQR = `
-    Фильм: ${selectSeanse.filmName}
-    Зал: ${selectSeanse.hallName}
-    Ряд/Место ${places}
-    Дата: ${dateStr}
-    Начало сеанса: ${selectSeanse.seanceTime}
-    Билет действителен строго на свой сеанс`;
+  let textQR = 
+
+  `Фильм: ${selectSeanse.filmName}\nДата: ${dateStr}\nВремя: ${selectSeanse.seanceTime}\nЗал: ${selectSeanse.hallName}\nМесто: ${places}\nБилет действителен строго на свой сеанс`;
 
 
 
