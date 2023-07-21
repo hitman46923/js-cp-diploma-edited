@@ -1,4 +1,4 @@
-function getRequest(body, callback = (response) => {}) {
+ function getRequest(body, callback = (response) => {}) {
   fetch("https://jscp-diplom.netoserver.ru/", {
     method: "POST",
     headers: {
@@ -13,4 +13,4 @@ function getRequest(body, callback = (response) => {}) {
   .catch(error => {
    
   });
-}
+} 
