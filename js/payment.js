@@ -1,73 +1,39 @@
+const selectSeanse = JSON.parse(localStorage.selectSeanse);
 
-
-  let selectSeanse = JSON.parse(sessionStorage.selectSeanse);
-let places = selectSeanse.salesPlaces.map(salePlace => `${salePlace.row}/${salePlace.place}`).join(", ");
+let places = "";
 let price = 0;
 
+for (const {
+		row, place, type
+	}
+	of selectSeanse.salesPlaces) {
+	if (places !== "") {
+		places += ", ";
+	}
+	places += `${row}/${place}`;
+	price += type === "standart" ? Number(selectSeanse.priceStandart) : Number(selectSeanse.priceVip);
+}
 
+document.querySelector(".ticket__title").innerHTML = selectSeanse.filmName;  
+document.querySelector(".ticket__chairs").innerHTML = places; 
+document.querySelector(".ticket__hall").innerHTML = selectSeanse.hallName;  
+document.querySelector(".ticket__start").innerHTML = selectSeanse.seanceTime;  
+document.querySelector(".ticket__cost").innerHTML = price;  
 
-selectSeanse.salesPlaces.forEach(salePlace => {
-  if (salePlace.type === "standart") {
-    price += Number(selectSeanse.priceStandart);
-  } else if (salePlace.type === "vip") {
-    price += Number(selectSeanse.priceVip);
-  }
-});
+const newHallConfig = selectSeanse.hallConfig.replace(/selected/g, "taken");
 
-
-
-let ticketElement = document.querySelector(".ticket");
-ticketElement.querySelector(".ticket__title").innerHTML = selectSeanse.filmName;
-ticketElement.querySelector(".ticket__chairs").innerHTML = places;
-ticketElement.querySelector(".ticket__hall").innerHTML = selectSeanse.hallName;
-ticketElement.querySelector(".ticket__start").innerHTML = selectSeanse.seanceTime;
-ticketElement.querySelector(".ticket__cost").innerHTML = price;
-
-let newHallConfig = selectSeanse.hallConfig.replace(/selected/g, "taken");
+console.log(selectSeanse.seanceTimeStamp);
+console.log(selectSeanse.hallId);
+console.log(selectSeanse.seanceId);
 console.log(newHallConfig);
 
 document.querySelector(".acceptin-button").addEventListener("click", (event) => {
-    event.preventDefault();
-    let request = `event=sale_add&timestamp=${selectSeanse.seanceTimeStamp}&hallId=${selectSeanse.hallId}&seanceId=${selectSeanse.seanceId}&hallConfiguration=${newHallConfig}`;
-    
-    request(request, () => {
-      window.location.href = 'ticket.html';
-    });
+	event.preventDefault();
+	fetch("https://jscp-diplom.netoserver.ru/", {
+		method: "POST",
+		headers: {
+			'Content-Type' : 'application/x-www-form-urlencoded'
+		},
+		body: `event=sale_add&timestamp=${selectSeanse.seanceTimeStamp}&hallId=${selectSeanse.hallId}&seanceId=${selectSeanse.seanceId}&hallConfiguration=${newHallConfig}`,
+	});
 });
-
-
-
-/*  let selectSeanse = JSON.parse(sessionStorage.selectSeanse);
-let places = selectSeanse.salesPlaces.map(salePlace => `${salePlace.row}/${salePlace.place}`).join(", ");
-let price = 0;
-
-selectSeanse.salesPlaces.forEach(salePlace => {
-    if (places) {
-        places += ", ";
-    }
-    places += `${salePlace.row}/ ${salePlace.place}`;
-    price += salePlace.type === "standart" ? Number(selectSeanse.priceStandart) : Number(selectSeanse.priceVip);
-
-});
-
-let ticketElement = document.querySelector(".ticket");
-ticketElement.querySelector(".ticket__title").innerHTML = selectSeanse.filmName;
-ticketElement.querySelector(".ticket__chairs").innerHTML = places;
-ticketElement.querySelector(".ticket__hall").innerHTML = selectSeanse.hallName;
-ticketElement.querySelector(".ticket__start").innerHTML = selectSeanse.seanceTime;
-ticketElement.querySelector(".ticket__cost").innerHTML = price;
-
-let newHallConfig = selectSeanse.hallConfig.replace(/selected/g, "taken");
-console.log(newHallConfig);
-
-document.querySelector("acceptin-button").addEventListener("click", (event) => {
-    event.preventDefault();
-    let request = `event=sale_add&timestamp=${selectSeanse.seanceTimeStamp}&hallId=${selectSeanse.hallId}&seanceId=${selectSeanse.seanceId}&hallConfiguration=${newHallConfig}`;
-    
-    request(request, () => {
-      window.location.href = 'ticket.html';
-    });
-  }); 
-
- 
- */
